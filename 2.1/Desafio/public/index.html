@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temas ISC</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <h1>Temas de Ingeniería en <br>Sistemas Computacionales 💻</h1><br><br>
+
+    <form id="Form" class="buttons">
+        <button type="button" data-type="Estructuras de Datos">🧩</button>
+        <button type="button" data-type="Bases de Datos">🗄️</button>
+        <button type="button" data-type="Desarrollo Web">🌐</button>
+        <button type="button" data-type="Redes">📡</button>
+    </form>
+
+    <div id="Container"></div>
+
+    <script>
+        document.querySelectorAll("#Form button").forEach(button => {
+          button.addEventListener("click", async (event) => {
+            const type = event.target.getAttribute("data-type").toLowerCase();
+            
+            const response = await fetch(`/temas/${type}`);
+            const tema = await response.json();
+    
+            const contenedor = document.getElementById("Container"); 
+            if (tema.error) {
+              contenedor.innerHTML = "<h2>Tema no encontrado</h2>"; //si no se recupera el contenido HTML de un elemento.
+            } else {
+              contenedor.innerHTML = `
+                <h2>${tema.nombre}</h2> 
+                <p><b>Descripción:</b>
+                  <br>${tema.descripcion}
+                </p>
+                <p><b>Detalles:</b></p>
+                <ul id="temasLista">
+                  <li><b>Palabras clave:</b> ${tema.palabras_clave}</li>
+                  <li><b>Título de práctica:</b> ${tema.practicas.titulo}</li>
+                  <li><b>Descripción de práctica:</b> ${tema.practicas.descripcion}</li>
+                  <li><b>Objetivo:</b> ${tema.practicas.objetivo}</li>
+                </ul>`
+            }
+          });
+        });
+    </script>
+
+</body>
+
+</html>
